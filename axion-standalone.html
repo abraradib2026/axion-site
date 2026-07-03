@@ -1,0 +1,1771 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Axion | AI Software Reviews & Tutorials</title>
+    <meta name="description" content="Professional AI software reviews, local AI tutorials, AI video generation, image generation, sponsored showcases and software demonstrations.">
+    <meta property="og:title" content="Axion | AI Software Reviews & Tutorials">
+    <meta property="og:description" content="Professional AI software reviews, local AI tutorials, AI video generation, image generation, sponsored showcases and software demonstrations.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <style>
+      :root {
+        --bg: #050505;
+        --card: #0e0e10;
+        --text: #e8e8e8;
+        --muted: rgba(255,255,255,.68);
+        --line: rgba(255,255,255,.08);
+        --cyan: #00f0ff;
+        --blue: #4f8dff;
+        --soft: #8ab4ff;
+        --ease: cubic-bezier(.16,1,.3,1);
+        --hover: cubic-bezier(.2,.8,.2,1);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body.axion {
+        margin: 0;
+        overflow-x: hidden;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Geist", "Inter", "Segoe UI", Arial, sans-serif;
+        text-rendering: geometricPrecision;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .axion-bg {
+        position: fixed;
+        inset: 0;
+        z-index: -5;
+        overflow: hidden;
+        background: var(--bg);
+      }
+
+      .axion-bg__mesh {
+        position: absolute;
+        inset: -18%;
+        opacity: .74;
+        filter: blur(24px);
+        background:
+          radial-gradient(circle at 16% 18%, rgba(0,240,255,.23), transparent 28%),
+          radial-gradient(circle at 82% 8%, rgba(79,141,255,.2), transparent 28%),
+          radial-gradient(circle at 58% 74%, rgba(138,92,255,.16), transparent 32%),
+          linear-gradient(135deg, rgba(255,255,255,.04), transparent 48%);
+      }
+
+      .axion-bg__grid {
+        position: absolute;
+        inset: 0;
+        opacity: .34;
+        background-image:
+          linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: linear-gradient(to bottom, transparent, black 12%, black 70%, transparent);
+      }
+
+      .axion-bg__noise {
+        position: absolute;
+        inset: 0;
+        opacity: .035;
+        mix-blend-mode: screen;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
+      }
+
+      .axion-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 80;
+        width: 100%;
+        height: 1px;
+        transform-origin: left;
+        transform: scaleX(0);
+        background: linear-gradient(90deg, var(--cyan), var(--blue), #fff);
+      }
+
+      .axion-cursor {
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 30;
+        width: 288px;
+        height: 288px;
+        pointer-events: none;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(0,240,255,.16), rgba(79,141,255,.08) 38%, transparent 68%);
+        filter: blur(18px);
+        mix-blend-mode: screen;
+        transform: translate(-400px,-400px);
+      }
+
+      .axion-nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 60;
+        padding: 20px 16px 0;
+        transition: padding .3s var(--ease);
+      }
+
+      .axion-nav.is-scrolled { padding-top: 12px; }
+
+      .axion-nav__inner {
+        max-width: 1280px;
+        min-height: 64px;
+        margin: 0 auto;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(5,5,5,.72);
+        backdrop-filter: blur(28px);
+        transition: min-height .3s var(--ease);
+      }
+
+      .axion-nav.is-scrolled .axion-nav__inner { min-height: 56px; }
+
+      .axion-logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        color: #fff;
+        text-decoration: none;
+      }
+
+      .axion-logo__mark {
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(0,240,255,.32);
+        background: rgba(0,240,255,.1);
+        color: var(--cyan);
+        font-size: 10px;
+        font-weight: 800;
+      }
+
+      .axion-logo__word,
+      .axion-nav__link,
+      .axion-section__marker,
+      .axion-mono {
+        font-family: "Geist Mono", "SFMono-Regular", Consolas, monospace;
+      }
+
+      .axion-logo__word {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .34em;
+      }
+
+      .axion-nav__links {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .axion-nav__link {
+        color: rgba(255,255,255,.68);
+        text-decoration: none;
+        font-size: 12px;
+        padding: 10px 12px;
+        border-radius: 6px;
+        transition: color .2s var(--hover), background .2s var(--hover);
+      }
+
+      .axion-nav__link:hover,
+      .axion-nav__link:focus-visible {
+        color: #fff;
+        background: rgba(255,255,255,.04);
+      }
+
+      .axion-nav__cta,
+      .axion-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 44px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform .2s var(--hover), border-color .2s var(--hover), background .2s var(--hover), box-shadow .2s var(--hover);
+      }
+
+      .axion-nav__cta {
+        padding: 0 16px;
+        color: var(--text);
+        border: 1px solid rgba(0,240,255,.26);
+        background: rgba(0,240,255,.1);
+      }
+
+      .axion-nav__cta:hover,
+      .axion-button:hover {
+        transform: translateY(-2px);
+      }
+
+      .axion-menu {
+        display: none;
+        width: 44px;
+        height: 44px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        color: #fff;
+        background: rgba(255,255,255,.04);
+        cursor: pointer;
+      }
+
+      .axion-mobile-menu {
+        display: none;
+        max-width: 1280px;
+        margin: 8px auto 0;
+        padding: 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(5,5,5,.94);
+        backdrop-filter: blur(28px);
+      }
+
+      .axion-mobile-menu.is-open { display: block; }
+
+      .axion-mobile-menu__link {
+        display: block;
+        color: rgba(255,255,255,.76);
+        text-decoration: none;
+        padding: 12px;
+        border-radius: 6px;
+      }
+
+      .axion-main { overflow: hidden; }
+
+      .axion-hero {
+        max-width: 1280px;
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: 128px 24px 80px;
+        display: grid;
+        grid-template-columns: .95fr 1.05fr;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .axion-kicker {
+        display: inline-flex;
+        padding: 8px 12px;
+        border: 1px solid rgba(0,240,255,.24);
+        border-radius: 6px;
+        background: rgba(0,240,255,.1);
+        color: var(--cyan);
+        font-size: 10px;
+        line-height: 1.4;
+        letter-spacing: .32em;
+        text-transform: uppercase;
+      }
+
+      .axion-hero__title {
+        margin: 24px 0 0;
+        color: #f5f4ef;
+        font-family: "Bahnschrift Condensed", "Bahnschrift", "Arial Narrow", "Aptos Narrow", "Roboto Condensed", "HelveticaNeue-CondensedBold", "Helvetica Neue", "Geist", sans-serif;
+        font-size: clamp(76px, 17vw, 208px);
+        line-height: .78;
+        letter-spacing: -.075em;
+        font-weight: 950;
+        font-stretch: condensed;
+        text-rendering: geometricPrecision;
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-stroke: .012em rgba(255,255,255,.05);
+      }
+
+      .axion-pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 28px;
+      }
+
+      .axion-pill {
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        color: rgba(255,255,255,.72);
+        background: rgba(255,255,255,.04);
+        font-size: 14px;
+      }
+
+      .axion-hero__copy {
+        max-width: 640px;
+        margin: 28px 0 0;
+        color: rgba(255,255,255,.72);
+        font-size: 20px;
+        line-height: 1.6;
+      }
+
+      .axion-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 36px;
+      }
+
+      .axion-button {
+        padding: 0 20px;
+        border: 1px solid var(--line);
+        color: var(--text);
+        background: rgba(255,255,255,.04);
+      }
+
+      .axion-button--primary {
+        color: #050505;
+        border-color: rgba(0,240,255,.45);
+        background: var(--cyan);
+        box-shadow: 0 18px 70px rgba(0,240,255,.24);
+      }
+
+      .axion-button--primary:hover {
+        background: var(--soft);
+        box-shadow: 0 20px 80px rgba(0,240,255,.34);
+      }
+
+      .axion-deck {
+        position: relative;
+        min-height: 420px;
+        overflow: hidden;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(14,14,16,.68);
+        box-shadow: 0 32px 120px rgba(0,0,0,.48);
+        backdrop-filter: blur(28px);
+      }
+
+      .axion-deck::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 25% 18%, rgba(0,240,255,.14), transparent 34%),
+          radial-gradient(circle at 80% 20%, rgba(79,141,255,.12), transparent 30%);
+      }
+
+      .axion-deck__grid {
+        position: absolute;
+        inset: 0;
+        opacity: .2;
+        background-image:
+          linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px);
+        background-size: 72px 72px;
+      }
+
+      .axion-deck__content {
+        position: relative;
+        min-height: 390px;
+        display: grid;
+        align-content: space-between;
+        gap: 20px;
+      }
+
+      .axion-deck__top,
+      .axion-dashboard__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 16px;
+      }
+
+      .axion-meta {
+        margin: 0;
+        color: rgba(255,255,255,.44);
+        font-size: 10px;
+        letter-spacing: .28em;
+        text-transform: uppercase;
+      }
+
+      .axion-deck__name {
+        margin: 4px 0 0;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .axion-live {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border: 1px solid rgba(0,240,255,.24);
+        border-radius: 6px;
+        color: var(--cyan);
+        background: rgba(0,240,255,.1);
+        font-size: 12px;
+      }
+
+      .axion-live__dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--cyan);
+      }
+
+      .axion-track-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .axion-track {
+        position: relative;
+        overflow: hidden;
+        min-height: 96px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255,255,255,.035);
+      }
+
+      .axion-track::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        background: linear-gradient(90deg, transparent, rgba(0,240,255,.26), transparent);
+      }
+
+      .axion-track__label {
+        position: relative;
+        margin: 0;
+        color: rgba(255,255,255,.48);
+        font-size: 10px;
+        letter-spacing: .24em;
+        text-transform: uppercase;
+      }
+
+      .axion-track__title {
+        position: relative;
+        margin: 12px 0 0;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -.02em;
+      }
+
+      .axion-signal {
+        display: grid;
+        grid-template-columns: .68fr .32fr;
+        gap: 16px;
+        border-top: 1px solid var(--line);
+        padding-top: 20px;
+      }
+
+      .axion-signal__head {
+        display: flex;
+        justify-content: space-between;
+        color: rgba(255,255,255,.48);
+        font-size: 12px;
+        margin-bottom: 16px;
+      }
+
+      .axion-signal__svg {
+        width: 100%;
+        height: 144px;
+      }
+
+      .axion-mini-stack {
+        display: grid;
+        align-content: space-between;
+        gap: 12px;
+      }
+
+      .axion-mini {
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255,255,255,.04);
+      }
+
+      .axion-mini__value {
+        margin: 8px 0 0;
+        color: #fff;
+        font-size: 24px;
+        font-weight: 800;
+      }
+
+      .axion-mini__value--fit {
+        white-space: nowrap;
+        font-size: 20px;
+      }
+
+      .axion-section {
+        padding: 96px 24px;
+      }
+
+      .axion-section__head {
+        max-width: 1280px;
+        margin: 0 auto 40px;
+        display: grid;
+        grid-template-columns: .34fr .66fr;
+        align-items: end;
+        gap: 20px;
+      }
+
+      .axion-section__marker {
+        margin: 0;
+        color: var(--cyan);
+        font-size: 11px;
+        letter-spacing: .32em;
+        text-transform: uppercase;
+      }
+
+      .axion-section__title {
+        max-width: 760px;
+        margin: 0;
+        color: #fff;
+        font-size: clamp(36px, 4.2vw, 56px);
+        line-height: .96;
+        letter-spacing: -.04em;
+      }
+
+      .axion-section__copy {
+        max-width: 680px;
+        margin: 16px 0 0;
+        color: rgba(255,255,255,.66);
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .axion-stat-grid,
+      .axion-feature-grid,
+      .axion-video-grid,
+      .axion-reason-grid,
+      .axion-testimonial-grid {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        gap: 16px;
+      }
+
+      .axion-stat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .axion-feature-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .axion-video-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .axion-reason-grid,
+      .axion-testimonial-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+      .axion-card,
+      .axion-stat,
+      .axion-video,
+      .axion-timeline__card,
+      .axion-testimonial {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(14,14,16,.74);
+        backdrop-filter: blur(24px);
+      }
+
+      .axion-card,
+      .axion-stat,
+      .axion-testimonial {
+        padding: 24px;
+      }
+
+      .axion-card,
+      .axion-stat,
+      .axion-video,
+      .axion-reason,
+      .axion-contact-card {
+        transition: transform .3s var(--hover), border-color .3s var(--hover), background .3s var(--hover), box-shadow .3s var(--hover);
+      }
+
+      .axion-card:hover,
+      .axion-stat:hover,
+      .axion-video:hover,
+      .axion-reason:hover,
+      .axion-contact-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(0,240,255,.36);
+        background: rgba(255,255,255,.055);
+      }
+
+      .axion-stat__value {
+        margin: 0;
+        color: #fff;
+        font-size: 40px;
+        line-height: 1;
+        letter-spacing: -.04em;
+        font-weight: 800;
+      }
+
+      .axion-stat__label,
+      .axion-card__copy,
+      .axion-video__meta,
+      .axion-reason__copy,
+      .axion-testimonial__copy,
+      .axion-timeline__copy {
+        color: rgba(255,255,255,.62);
+      }
+
+      .axion-stat__label {
+        margin: 12px 0 0;
+        font-size: 14px;
+      }
+
+      .axion-card__icon,
+      .axion-reason__icon,
+      .axion-dashboard__icon {
+        width: 28px;
+        height: 28px;
+        color: var(--cyan);
+      }
+
+      .axion-card__title,
+      .axion-reason__title,
+      .axion-video__title,
+      .axion-timeline__title {
+        color: #fff;
+        letter-spacing: -.02em;
+      }
+
+      .axion-card__title {
+        margin: 32px 0 0;
+        font-size: 20px;
+      }
+
+      .axion-card__copy,
+      .axion-reason__copy,
+      .axion-timeline__copy {
+        margin: 16px 0 0;
+        line-height: 1.65;
+      }
+
+      .axion-video {
+        display: block;
+        overflow: hidden;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .axion-video__thumb {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background-image:
+          linear-gradient(135deg, rgba(0,240,255,.24), rgba(79,141,255,.16), rgba(138,92,255,.22)),
+          linear-gradient(120deg, rgba(255,255,255,.16) 1px, transparent 1px);
+        background-size: auto, 18px 18px;
+      }
+
+      .axion-video:nth-child(2) .axion-video__thumb {
+        background-image: linear-gradient(135deg, rgba(232,232,232,.16), rgba(0,240,255,.2), rgba(79,141,255,.28));
+      }
+
+      .axion-video:nth-child(3) .axion-video__thumb {
+        background-image: linear-gradient(135deg, rgba(79,141,255,.24), rgba(138,92,255,.22), rgba(0,240,255,.16));
+      }
+
+      .axion-video__brand {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        padding: 4px 8px;
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 6px;
+        background: rgba(0,0,0,.24);
+        color: rgba(255,255,255,.7);
+        font-size: 10px;
+        letter-spacing: .22em;
+      }
+
+      .axion-video__play {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 56px;
+        height: 56px;
+        display: grid;
+        place-items: center;
+        transform: translate(-50%,-50%);
+        border: 1px solid rgba(255,255,255,.18);
+        border-radius: 999px;
+        background: rgba(5,5,5,.45);
+        backdrop-filter: blur(20px);
+      }
+
+      .axion-video__image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform .5s var(--ease);
+      }
+
+      .axion-video:hover .axion-video__image {
+        transform: scale(1.035);
+      }
+
+      .axion-video__body {
+        padding: 20px;
+      }
+
+      .axion-video__title {
+        margin: 0;
+        font-size: 20px;
+        line-height: 1.18;
+      }
+
+      .axion-video__meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 20px;
+        font-size: 14px;
+      }
+
+      .axion-dashboard {
+        max-width: 1280px;
+        margin: 0 auto;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(14,14,16,.74);
+        box-shadow: 0 32px 120px rgba(0,0,0,.38);
+        backdrop-filter: blur(28px);
+      }
+
+      .axion-dashboard__top {
+        padding: 20px;
+      }
+
+      .axion-dashboard__title {
+        margin: 8px 0 0;
+        color: #fff;
+        font-size: 24px;
+        letter-spacing: -.03em;
+      }
+
+      .axion-dashboard__body {
+        display: grid;
+        grid-template-columns: .36fr .64fr;
+      }
+
+      .axion-dashboard__metrics {
+        border-right: 1px solid var(--line);
+      }
+
+      .axion-metric {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .axion-metric__box {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: rgba(255,255,255,.04);
+      }
+
+      .axion-metric__label {
+        margin: 0;
+        color: rgba(255,255,255,.46);
+        font-size: 14px;
+      }
+
+      .axion-metric__value {
+        margin: 4px 0 0;
+        color: #fff;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -.03em;
+      }
+
+      .axion-metric__detail {
+        margin: 4px 0 0;
+        color: rgba(255,255,255,.56);
+        font-size: 13px;
+      }
+
+      .axion-chart-wrap {
+        padding: 28px;
+      }
+
+      .axion-chart-grid {
+        display: grid;
+        grid-template-columns: .62fr .38fr;
+        gap: 20px;
+      }
+
+      .axion-panel {
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255,255,255,.03);
+      }
+
+      .axion-panel__sub {
+        margin: 0;
+        color: rgba(255,255,255,.46);
+        font-size: 14px;
+      }
+
+      .axion-panel__number {
+        margin: 4px 0 0;
+        color: #fff;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -.04em;
+      }
+
+      .axion-bars {
+        height: 192px;
+        margin-top: 28px;
+        display: flex;
+        align-items: end;
+        gap: 12px;
+      }
+
+      .axion-bar {
+        flex: 1;
+        min-width: 0;
+        border-radius: 6px 6px 0 0;
+        background: linear-gradient(to top, var(--blue), var(--cyan), #fff);
+        transform-origin: bottom;
+      }
+
+      .axion-progress-list {
+        display: grid;
+        gap: 16px;
+      }
+
+      .axion-progress-row__top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        color: rgba(255,255,255,.64);
+        font-size: 14px;
+      }
+
+      .axion-progress-row__rail {
+        height: 8px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255,255,255,.06);
+      }
+
+      .axion-progress-row__fill {
+        height: 100%;
+        border-radius: 999px;
+        background: var(--cyan);
+        transform-origin: left;
+      }
+
+      .axion-timeline {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      .axion-timeline__item {
+        position: relative;
+        display: grid;
+        grid-template-columns: .24fr .76fr;
+        gap: 20px;
+        border-left: 1px solid rgba(255,255,255,.12);
+        padding: 0 0 40px 24px;
+      }
+
+      .axion-timeline__item:last-child { padding-bottom: 0; }
+
+      .axion-timeline__dot {
+        position: absolute;
+        left: -7px;
+        top: 4px;
+        width: 12px;
+        height: 12px;
+        border: 1px solid var(--cyan);
+        border-radius: 999px;
+        background: var(--bg);
+        box-shadow: 0 0 24px rgba(0,240,255,.45);
+      }
+
+      .axion-timeline__status {
+        margin: 2px 0 0;
+        color: var(--cyan);
+        font-size: 10px;
+        letter-spacing: .32em;
+        text-transform: uppercase;
+      }
+
+      .axion-timeline__card {
+        padding: 24px;
+      }
+
+      .axion-timeline__title {
+        margin: 0;
+        font-size: 24px;
+      }
+
+      .axion-reason {
+        padding: 28px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(14,14,16,.72);
+      }
+
+      .axion-reason__title {
+        margin: 32px 0 0;
+        font-size: 24px;
+      }
+
+      .axion-testimonial {
+        border-style: dashed;
+        background: rgba(255,255,255,.025);
+      }
+
+      .axion-testimonial__copy {
+        margin: 32px 0 0;
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      .axion-media {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: .48fr .52fr;
+        gap: 32px;
+        overflow: hidden;
+        padding: 32px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(14,14,16,.74);
+        box-shadow: 0 32px 120px rgba(0,0,0,.38);
+        backdrop-filter: blur(28px);
+      }
+
+      .axion-media__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 32px;
+      }
+
+      .axion-media__title {
+        margin: 20px 0 0;
+        color: #fff;
+        font-size: clamp(36px, 4vw, 56px);
+        line-height: .98;
+        letter-spacing: -.04em;
+      }
+
+      .axion-media__copy {
+        margin: 20px 0 0;
+        color: rgba(255,255,255,.64);
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .axion-media__preview {
+        position: relative;
+        min-height: 420px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background:
+          radial-gradient(circle at 20% 0%, rgba(0,240,255,.16), transparent 30%),
+          radial-gradient(circle at 90% 20%, rgba(79,141,255,.12), transparent 28%),
+          #050505;
+        padding: 20px;
+      }
+
+      .axion-kit {
+        max-width: 384px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,.1);
+        border-radius: 8px;
+        background: rgba(255,255,255,.04);
+        box-shadow: 0 20px 90px rgba(0,0,0,.35);
+      }
+
+      .axion-kit__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 20px;
+      }
+
+      .axion-kit__title {
+        margin: 12px 0 0;
+        color: #fff;
+        font-size: 36px;
+        letter-spacing: -.05em;
+      }
+
+      .axion-kit__grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .axion-kit__cell {
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        color: rgba(255,255,255,.72);
+        background: rgba(255,255,255,.04);
+        font-size: 14px;
+      }
+
+      .axion-kit__block {
+        height: 96px;
+        margin-top: 24px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: linear-gradient(135deg, rgba(0,240,255,.2), rgba(79,141,255,.12), rgba(255,255,255,.06));
+      }
+
+      .axion-contact {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: .56fr .44fr;
+        align-items: center;
+        gap: 32px;
+      }
+
+      .axion-contact__title {
+        margin: 20px 0 0;
+        color: #fff;
+        font-size: clamp(40px, 5vw, 64px);
+        line-height: .98;
+        letter-spacing: -.04em;
+      }
+
+      .axion-contact__copy {
+        max-width: 640px;
+        margin: 24px 0 0;
+        color: rgba(255,255,255,.64);
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .axion-contact__stack {
+        display: grid;
+        gap: 12px;
+      }
+
+      .axion-contact-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 20px;
+        color: inherit;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(14,14,16,.74);
+      }
+
+      .axion-contact-card__label {
+        margin: 0;
+        color: rgba(255,255,255,.46);
+        font-size: 14px;
+      }
+
+      .axion-contact-card__value {
+        display: block;
+        margin-top: 4px;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+      }
+
+      .axion-footer {
+        border-top: 1px solid var(--line);
+        padding: 40px 24px;
+      }
+
+      .axion-footer__inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 32px;
+      }
+
+      .axion-footer__brand {
+        margin: 0;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .34em;
+      }
+
+      .axion-footer__copy {
+        margin: 12px 0 0;
+        color: rgba(255,255,255,.48);
+        font-size: 14px;
+      }
+
+      .axion-footer__links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .axion-footer__link {
+        color: rgba(255,255,255,.54);
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .axion-footer__right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: rgba(255,255,255,.48);
+        font-size: 14px;
+      }
+
+      .axion-icon-button {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        color: #fff;
+        background: rgba(255,255,255,.03);
+      }
+
+      .axion-svg {
+        width: 20px;
+        height: 20px;
+        display: block;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .axion-svg--fill {
+        fill: currentColor;
+      }
+
+      .axion-entrance {
+        opacity: 1;
+        transform: none;
+      }
+
+      .axion-entrance.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .axion-bg__mesh { animation: axion-mesh 22s var(--ease) infinite alternate; }
+        .axion-bg__grid { animation: axion-grid 30s var(--ease) infinite alternate; }
+        .axion-track::before { animation: axion-scan 4.8s var(--ease) infinite; }
+        .axion-hero__copy,
+        .axion-hero__title,
+        .axion-kicker,
+        .axion-pill-row,
+        .axion-actions,
+        .axion-deck { animation: axion-intro .9s var(--ease) both; }
+        .axion-hero__title { animation-delay: .08s; }
+        .axion-pill-row { animation-delay: .16s; }
+        .axion-hero__copy { animation-delay: .24s; }
+        .axion-actions { animation-delay: .32s; }
+        .axion-deck { animation-delay: .24s; }
+        .axion-dashboard .axion-metric {
+          opacity: 0;
+          transform: translate3d(0,20px,0) scale(.96);
+          will-change: opacity, transform;
+        }
+        .axion-dashboard.is-animated .axion-metric {
+          animation: axion-stat-in .72s var(--ease) both;
+        }
+        .axion-dashboard.is-animated .axion-metric:nth-child(2) { animation-delay: .12s; }
+        .axion-dashboard.is-animated .axion-metric:nth-child(3) { animation-delay: .24s; }
+        .axion-dashboard.is-animated .axion-metric:nth-child(4) { animation-delay: .36s; }
+        .axion-panel--chart,
+        .axion-progress-list {
+          opacity: 0;
+          transform: translate3d(0,18px,0) scale(.98);
+          will-change: opacity, transform;
+        }
+        .axion-dashboard.is-animated .axion-panel--chart {
+          animation: axion-panel-in .66s var(--ease) .76s both;
+        }
+        .axion-dashboard.is-animated .axion-progress-list {
+          animation: axion-panel-in .66s var(--ease) 1.02s both;
+        }
+        .axion-bar {
+          transform: scaleY(0);
+          will-change: transform;
+          transition: transform .72s var(--ease);
+        }
+        .axion-dashboard.is-animated .axion-bar { transform: scaleY(1); }
+        .axion-dashboard.is-animated .axion-bar:nth-child(1) { transition-delay: .9s; }
+        .axion-dashboard.is-animated .axion-bar:nth-child(2) { transition-delay: .97s; }
+        .axion-dashboard.is-animated .axion-bar:nth-child(3) { transition-delay: 1.04s; }
+        .axion-dashboard.is-animated .axion-bar:nth-child(4) { transition-delay: 1.11s; }
+        .axion-dashboard.is-animated .axion-bar:nth-child(5) { transition-delay: 1.18s; }
+        .axion-dashboard.is-animated .axion-bar:nth-child(6) { transition-delay: 1.25s; }
+        .axion-dashboard.is-animated .axion-bar:nth-child(7) { transition-delay: 1.32s; }
+        .axion-dashboard.is-animated .axion-bar:nth-child(8) { transition-delay: 1.39s; }
+        .axion-progress-row__fill {
+          transform: scaleX(0);
+          will-change: transform;
+          transition: transform .82s var(--ease);
+        }
+        .axion-dashboard.is-animated .axion-progress-row__fill { transform: scaleX(1); }
+        .axion-dashboard.is-animated .axion-progress-row:nth-child(1) .axion-progress-row__fill { transition-delay: 1.16s; }
+        .axion-dashboard.is-animated .axion-progress-row:nth-child(3) .axion-progress-row__fill { transition-delay: 1.26s; }
+        .axion-dashboard.is-animated .axion-progress-row:nth-child(5) .axion-progress-row__fill { transition-delay: 1.36s; }
+      }
+
+      @keyframes axion-intro {
+        from { opacity: 0; transform: translateY(24px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes axion-stat-in {
+        0% {
+          opacity: 0;
+          transform: translate3d(0,20px,0) scale(.96);
+          box-shadow: inset 0 0 0 rgba(0,240,255,0);
+        }
+        58% {
+          box-shadow: inset 0 0 44px rgba(0,240,255,.09);
+        }
+        100% {
+          opacity: 1;
+          transform: translate3d(0,0,0) scale(1);
+          box-shadow: inset 0 0 0 rgba(0,240,255,0);
+        }
+      }
+
+      @keyframes axion-panel-in {
+        from { opacity: 0; transform: translate3d(0,18px,0) scale(.98); }
+        to { opacity: 1; transform: translate3d(0,0,0) scale(1); }
+      }
+
+      @keyframes axion-mesh {
+        0% { transform: translate3d(-2%,-1%,0) scale(1); }
+        50% { transform: translate3d(2%,1%,0) scale(1.03); }
+        100% { transform: translate3d(0,2%,0) scale(1.01); }
+      }
+
+      @keyframes axion-grid {
+        from { background-position: 0 0; }
+        to { background-position: 72px 72px; }
+      }
+
+      @keyframes axion-scan {
+        0% { transform: translateX(-100%); opacity: 0; }
+        18% { opacity: 1; }
+        82% { opacity: 1; }
+        100% { transform: translateX(100%); opacity: 0; }
+      }
+
+      @media (max-width: 1100px) {
+        .axion-hero,
+        .axion-media,
+        .axion-contact,
+        .axion-dashboard__body,
+        .axion-chart-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .axion-stat-grid,
+        .axion-feature-grid,
+        .axion-video-grid,
+        .axion-reason-grid,
+        .axion-testimonial-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .axion-dashboard__metrics {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+      }
+
+      @media (max-width: 760px) {
+        .axion-nav__links,
+        .axion-nav__cta {
+          display: none;
+        }
+
+        .axion-menu {
+          display: grid;
+          place-items: center;
+        }
+
+        .axion-hero {
+          min-height: auto;
+          padding: 104px 16px 48px;
+          gap: 32px;
+        }
+
+        .axion-hero__title {
+          font-size: clamp(56px, 20vw, 88px);
+        }
+
+        .axion-hero__copy,
+        .axion-section__copy,
+        .axion-media__copy,
+        .axion-contact__copy {
+          font-size: 16px;
+        }
+
+        .axion-actions,
+        .axion-button {
+          width: 100%;
+        }
+
+        .axion-signal,
+        .axion-track-grid,
+        .axion-section__head,
+        .axion-stat-grid,
+        .axion-feature-grid,
+        .axion-video-grid,
+        .axion-reason-grid,
+        .axion-testimonial-grid,
+        .axion-timeline__item,
+        .axion-media,
+        .axion-contact {
+          grid-template-columns: 1fr;
+        }
+
+        .axion-section {
+          padding: 72px 16px;
+        }
+
+        .axion-section__title,
+        .axion-media__title,
+        .axion-contact__title {
+          font-size: 34px;
+        }
+
+        .axion-deck {
+          min-height: auto;
+        }
+
+        .axion-footer__inner {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: .01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: .01ms !important;
+          scroll-behavior: auto !important;
+        }
+
+        .axion-entrance {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body class="axion">
+    <div class="axion-bg" aria-hidden="true">
+      <div class="axion-bg__mesh"></div>
+      <div class="axion-bg__grid"></div>
+      <div class="axion-bg__noise"></div>
+    </div>
+    <div class="axion-progress" data-progress aria-hidden="true"></div>
+    <div class="axion-cursor" data-cursor aria-hidden="true"></div>
+
+    <header class="axion-nav" data-nav>
+      <nav class="axion-nav__inner" aria-label="Main navigation">
+        <a class="axion-logo" href="#home">
+          <span class="axion-logo__mark">AX</span>
+          <span class="axion-logo__word">AXION</span>
+        </a>
+        <div class="axion-nav__links">
+          <a class="axion-nav__link" href="#home">Home</a>
+          <a class="axion-nav__link" href="#about">About</a>
+          <a class="axion-nav__link" href="#videos">Videos</a>
+          <a class="axion-nav__link" href="#collaborations">Collaborations</a>
+          <a class="axion-nav__link" href="#media-kit">Media Kit</a>
+          <a class="axion-nav__link" href="#contact">Contact</a>
+        </div>
+        <a class="axion-nav__cta" href="#contact">Get in Touch <span aria-hidden="true">-&gt;</span></a>
+        <button class="axion-menu" type="button" data-menu aria-label="Open navigation" aria-expanded="false">
+          <svg class="axion-svg" viewBox="0 0 24 24" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+        </button>
+      </nav>
+      <div class="axion-mobile-menu" data-mobile-menu>
+        <a class="axion-mobile-menu__link" href="#home">Home</a>
+        <a class="axion-mobile-menu__link" href="#about">About</a>
+        <a class="axion-mobile-menu__link" href="#videos">Videos</a>
+        <a class="axion-mobile-menu__link" href="#collaborations">Collaborations</a>
+        <a class="axion-mobile-menu__link" href="#media-kit">Media Kit</a>
+        <a class="axion-mobile-menu__link" href="#contact">Contact</a>
+      </div>
+    </header>
+
+    <main class="axion-main">
+      <section class="axion-hero" id="home">
+        <div class="axion-hero__content">
+          <span class="axion-kicker axion-mono">Premium creator intelligence</span>
+          <h1 class="axion-hero__title">AXION</h1>
+          <div class="axion-pill-row">
+            <span class="axion-pill">AI Software Reviews</span>
+            <span class="axion-pill">Local AI</span>
+            <span class="axion-pill">Video Generation</span>
+            <span class="axion-pill">Tutorials</span>
+          </div>
+          <p class="axion-hero__copy">Helping creators discover powerful AI tools through practical demonstrations, honest reviews and high-quality tutorials.</p>
+          <div class="axion-actions">
+            <a class="axion-button axion-button--primary" href="https://www.youtube.com/@Axion_exe" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+            <a class="axion-button" href="#" data-pdf-download download="axion-media-kit.pdf">Download Media Kit</a>
+          </div>
+        </div>
+
+        <div class="axion-deck" data-tilt>
+          <div class="axion-deck__grid"></div>
+          <div class="axion-deck__content">
+            <div class="axion-deck__top">
+              <div>
+                <p class="axion-meta axion-mono">Creator Signal</p>
+                <p class="axion-deck__name">AI market coverage</p>
+              </div>
+              <span class="axion-live"><span class="axion-live__dot"></span>Live</span>
+            </div>
+            <div class="axion-track-grid">
+              <div class="axion-track"><p class="axion-track__label axion-mono">Track</p><p class="axion-track__title">AI Tools</p></div>
+              <div class="axion-track"><p class="axion-track__label axion-mono">Track</p><p class="axion-track__title">Local AI</p></div>
+              <div class="axion-track"><p class="axion-track__label axion-mono">Track</p><p class="axion-track__title">Reviews</p></div>
+              <div class="axion-track"><p class="axion-track__label axion-mono">Track</p><p class="axion-track__title">Guides</p></div>
+            </div>
+            <div class="axion-signal">
+              <div>
+                <div class="axion-signal__head"><span>Audience signal</span><span>+18.4%</span></div>
+                <svg class="axion-signal__svg" viewBox="0 0 420 140" role="img" aria-label="Rising channel signal graph">
+                  <defs><linearGradient id="lineGradient" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#00F0FF"></stop><stop offset="60%" stop-color="#4F8DFF"></stop><stop offset="100%" stop-color="#E8E8E8"></stop></linearGradient></defs>
+                  <path d="M4 124 C48 116 78 118 112 109 C148 100 174 104 206 96 C240 88 268 91 300 82 C334 74 368 76 416 64" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="18" stroke-linecap="round"></path>
+                  <path d="M4 124 C48 116 78 118 112 109 C148 100 174 104 206 96 C240 88 268 91 300 82 C334 74 368 76 416 64" fill="none" stroke="url(#lineGradient)" stroke-width="4" stroke-linecap="round"></path>
+                </svg>
+              </div>
+              <div class="axion-mini-stack">
+                <div class="axion-mini"><p class="axion-meta axion-mono">Sponsor fit</p><p class="axion-mini__value axion-mini__value--fit">AI Companies</p></div>
+                <div class="axion-mini"><p class="axion-meta axion-mono">Response</p><p class="axion-mini__value axion-mini__value--fit">24–48 Hours</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="axion-section axion-entrance" style="padding-top:0;padding-bottom:40px">
+        <div class="axion-stat-grid" style="grid-template-columns:1fr">
+          <article class="axion-stat" style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+            <p class="axion-section__marker">Trusted By</p>
+            <p class="axion-stat__value" style="font-size:18px;display:flex;align-items:center;gap:10px"><span style="color:#00F0FF">Verified</span> Simpligen</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="axion-section axion-entrance">
+        <div class="axion-stat-grid">
+          <article class="axion-stat"><p class="axion-stat__value">1,000+</p><p class="axion-stat__label">Subscribers</p></article>
+          <article class="axion-stat"><p class="axion-stat__value">50,000+</p><p class="axion-stat__label">Lifetime Views</p></article>
+          <article class="axion-stat"><p class="axion-stat__value">2 Months</p><p class="axion-stat__label">Channel Age</p></article>
+          <article class="axion-stat"><p class="axion-stat__value" data-brand-collaboration-count>1</p><p class="axion-stat__label">Brand Collaboration</p></article>
+        </div>
+      </section>
+
+      <section class="axion-section axion-entrance" id="about">
+        <div class="axion-section__head">
+          <p class="axion-section__marker">01 / Focus</p>
+          <div><h2 class="axion-section__title">A creator brand built like a product channel.</h2><p class="axion-section__copy">Axion packages AI tools with the structure sponsors expect: clear positioning, useful demos and polished delivery.</p></div>
+        </div>
+        <div class="axion-feature-grid">
+          <article class="axion-card"><svg class="axion-card__icon axion-svg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg><h3 class="axion-card__title">Dedicated Reviews</h3><p class="axion-card__copy">Professional AI software reviews with practical setup, honest tradeoffs and clear product fit.</p></article>
+          <article class="axion-card"><svg class="axion-card__icon axion-svg" viewBox="0 0 24 24"><path d="m22 8-6 4 6 4V8Z"></path><rect width="14" height="12" x="2" y="6" rx="2"></rect></svg><h3 class="axion-card__title">Tutorial Videos</h3><p class="axion-card__copy">Step-by-step demonstrations that help viewers move from curiosity to working AI workflows.</p></article>
+          <article class="axion-card"><svg class="axion-card__icon axion-svg" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09Z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22 22 0 0 1-4 2Z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg><h3 class="axion-card__title">Sponsored Integrations</h3><p class="axion-card__copy">Natural product integrations built around useful moments, not interruption-heavy ad reads.</p></article>
+          <article class="axion-card"><svg class="axion-card__icon axion-svg" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7h18"></path><path d="M3 17h18"></path></svg><h3 class="axion-card__title">Product Launch Coverage</h3><p class="axion-card__copy">Launch-ready showcases for AI startups that need polished reach and credible explanation.</p></article>
+        </div>
+      </section>
+
+      <section class="axion-section axion-entrance" id="videos">
+        <div class="axion-section__head">
+          <p class="axion-section__marker">02 / Videos</p>
+          <div><h2 class="axion-section__title">High-signal videos for AI-curious creators.</h2><p class="axion-section__copy">Each upload is framed around practical discovery: what the product does, how it works and where it fits.</p></div>
+        </div>
+        <div class="axion-video-grid">
+          <a class="axion-video" href="https://youtu.be/kptdWozyzrM?si=Crsb3I5X6kXJZ3AH" target="_blank" rel="noopener noreferrer"><div class="axion-video__thumb"><img class="axion-video__image" src="public/video-1.jpg" alt="" loading="lazy"><span class="axion-video__brand axion-mono">Featured Video</span><span class="axion-video__play"><svg class="axion-svg axion-svg--fill" viewBox="0 0 24 24"><polygon points="10 8 16 12 10 16 10 8"></polygon></svg></span></div><div class="axion-video__body"><h3 class="axion-video__title">This 100% UNCENSORED AI Video Literally Generates Anything on Your PC !![No Monthly Subscription]</h3><div class="axion-video__meta"><span>Top YouTube video</span><span>View</span></div></div></a>
+          <a class="axion-video" href="https://youtu.be/Sg1gZ8vvPao?si=NkmygRQTZBvAG35f" target="_blank" rel="noopener noreferrer"><div class="axion-video__thumb"><img class="axion-video__image" src="public/video-2.jpg" alt="" loading="lazy"><span class="axion-video__brand axion-mono">Top Video</span><span class="axion-video__play"><svg class="axion-svg axion-svg--fill" viewBox="0 0 24 24"><polygon points="10 8 16 12 10 16 10 8"></polygon></svg></span></div><div class="axion-video__body"><h3 class="axion-video__title">This AI Free Tool Literally Generates Anything! [Uncensored + Unlimited]</h3><div class="axion-video__meta"><span>Top YouTube video</span><span>View</span></div></div></a>
+          <a class="axion-video" href="https://youtu.be/Z61G0bx8ehI?si=CL8pKqwfnvhdra_f" target="_blank" rel="noopener noreferrer"><div class="axion-video__thumb"><img class="axion-video__image" src="public/video-3.jpg" alt="" loading="lazy"><span class="axion-video__brand axion-mono">Creator Tutorial</span><span class="axion-video__play"><svg class="axion-svg axion-svg--fill" viewBox="0 0 24 24"><polygon points="10 8 16 12 10 16 10 8"></polygon></svg></span></div><div class="axion-video__body"><h3 class="axion-video__title">Make Grok AI 100% uncensored in 5 minutes! [No clickbait just watch]</h3><div class="axion-video__meta"><span>Top YouTube video</span><span>View</span></div></div></a>
+        </div>
+      </section>
+
+      <section class="axion-section axion-entrance">
+        <div class="axion-section__head">
+          <p class="axion-section__marker">03 / Performance</p>
+          <div><h2 class="axion-section__title">Channel proof presented like a SaaS analytics view.</h2><p class="axion-section__copy">Axion makes sponsor fit easy to scan with audience traction, content quality and campaign readiness in one system.</p></div>
+        </div>
+        <div class="axion-dashboard" data-dashboard>
+          <div class="axion-dashboard__top"><div><p class="axion-section__marker">Axion Analytics</p><h3 class="axion-dashboard__title">Creator growth dashboard</h3></div><span class="axion-live">Growing</span></div>
+          <div class="axion-dashboard__body">
+            <div class="axion-dashboard__metrics">
+              <div class="axion-metric"><div class="axion-metric__box"><svg class="axion-dashboard__icon axion-svg" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17"></path><path d="M16 7h6v6"></path></svg></div><div><p class="axion-metric__label">Subscribers</p><p class="axion-metric__value" data-count data-value="1000" data-suffix="+">1,000+</p><p class="axion-metric__detail">Qualified early AI audience</p></div></div>
+              <div class="axion-metric"><div class="axion-metric__box"><svg class="axion-dashboard__icon axion-svg" viewBox="0 0 24 24"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg></div><div><p class="axion-metric__label">Lifetime Views</p><p class="axion-metric__value" data-count data-value="50000" data-suffix="+">50,000+</p><p class="axion-metric__detail">Across AI software content</p></div></div>
+              <div class="axion-metric"><div class="axion-metric__box"><svg class="axion-dashboard__icon axion-svg" viewBox="0 0 24 24"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg></div><div><p class="axion-metric__label">Channel Age</p><p class="axion-metric__value" data-count data-value="2" data-suffix=" Months">2 Months</p><p class="axion-metric__detail">Fast early momentum</p></div></div>
+              <div class="axion-metric"><div class="axion-metric__box"><svg class="axion-dashboard__icon axion-svg" viewBox="0 0 24 24"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></div><div><p class="axion-metric__label">Brand Collaboration</p><p class="axion-metric__value" data-count data-value="1" data-brand-collaboration-count>1</p><p class="axion-metric__detail">Completed sponsor campaign</p></div></div>
+            </div>
+            <div class="axion-chart-wrap">
+              <div class="axion-chart-grid">
+                <div class="axion-panel axion-panel--chart"><p class="axion-panel__sub">Lifetime views by content format</p><p class="axion-panel__number">50,000+</p><div class="axion-bars"><span class="axion-bar" style="height:38%"></span><span class="axion-bar" style="height:54%"></span><span class="axion-bar" style="height:44%"></span><span class="axion-bar" style="height:72%"></span><span class="axion-bar" style="height:68%"></span><span class="axion-bar" style="height:84%"></span><span class="axion-bar" style="height:78%"></span><span class="axion-bar" style="height:92%"></span></div></div>
+                <div class="axion-progress-list">
+                  <div class="axion-panel"><div class="axion-progress-row"><div class="axion-progress-row__top"><span>AI tools</span><span>91%</span></div><div class="axion-progress-row__rail"><div class="axion-progress-row__fill" style="width:91%"></div></div></div><br><div class="axion-progress-row"><div class="axion-progress-row__top"><span>Creator workflow</span><span>84%</span></div><div class="axion-progress-row__rail"><div class="axion-progress-row__fill" style="width:84%"></div></div></div><br><div class="axion-progress-row"><div class="axion-progress-row__top"><span>Product demos</span><span>78%</span></div><div class="axion-progress-row__rail"><div class="axion-progress-row__fill" style="width:78%"></div></div></div></div>
+                  <div class="axion-panel"><p class="axion-meta axion-mono">Sponsor runway</p><p class="axion-card__title">Dedicated review, launch coverage and tutorial integrations.</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="axion-section axion-entrance" id="collaborations">
+        <div class="axion-section__head">
+          <p class="axion-section__marker">04 / Collaborations</p>
+          <div><h2 class="axion-section__title">A clean sponsorship path for AI products.</h2><p class="axion-section__copy">Current and future partnerships are organized as a launch pipeline, so sponsor conversations start with context.</p></div>
+        </div>
+        <div class="axion-timeline">
+          <div class="axion-timeline__item"><span class="axion-timeline__dot"></span><p class="axion-timeline__status axion-mono">Previous Collaboration</p><div class="axion-timeline__card"><h3 class="axion-timeline__title">Simpligen</h3><p class="axion-timeline__copy">Dedicated Sponsored Video. Completed Successfully.</p></div></div>
+        </div>
+      </section>
+
+      <section class="axion-section axion-entrance">
+        <div class="axion-section__head">
+          <p class="axion-section__marker">05 / Sponsor Fit</p>
+          <div><h2 class="axion-section__title">Why AI startups work with Axion.</h2><p class="axion-section__copy">The channel is focused, practical and built for software audiences who want to see tools in motion.</p></div>
+        </div>
+        <div class="axion-reason-grid">
+          <article class="axion-reason"><svg class="axion-reason__icon axion-svg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg><h3 class="axion-reason__title">Authentic Reviews</h3><p class="axion-reason__copy">Viewers get the product story with setup clarity, tested use cases and candid limitations.</p></article>
+          <article class="axion-reason"><svg class="axion-reason__icon axion-svg" viewBox="0 0 24 24"><path d="M12 5a3 3 0 1 0-5.997.125"></path><path d="M12 5a3 3 0 1 1 5.997.125"></path><path d="M15 13a3 3 0 1 1-3 3v-3"></path><path d="M9 13a3 3 0 1 0 3 3v-3"></path><path d="M12 5v8"></path><path d="M9 13h6"></path></svg><h3 class="axion-reason__title">AI Focused Audience</h3><p class="axion-reason__copy">The channel reaches creators and builders actively searching for practical AI software.</p></article>
+          <article class="axion-reason"><svg class="axion-reason__icon axion-svg" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7h18"></path><path d="M3 17h18"></path></svg><h3 class="axion-reason__title">Professional Editing</h3><p class="axion-reason__copy">Every sponsored moment is packaged with sharp pacing, premium visuals and direct takeaways.</p></article>
+        </div>
+      </section>
+
+      <section class="axion-section axion-entrance">
+        <div class="axion-section__head">
+          <p class="axion-section__marker">06 / Testimonials</p>
+          <div><h2 class="axion-section__title">Sponsor quotes will sit inside the same premium system.</h2><p class="axion-section__copy">Until campaigns ship with public quotes, Axion keeps this area intentionally quiet and ready for proof.</p></div>
+        </div>
+        <div class="axion-testimonial-grid">
+          <article class="axion-testimonial"><p class="axion-meta axion-mono">Coming Soon</p><p class="axion-testimonial__copy">Brand testimonials will appear here as collaborations grow.</p></article>
+          <article class="axion-testimonial"><p class="axion-meta axion-mono">Coming Soon</p><p class="axion-testimonial__copy">Brand testimonials will appear here as collaborations grow.</p></article>
+          <article class="axion-testimonial"><p class="axion-meta axion-mono">Coming Soon</p><p class="axion-testimonial__copy">Brand testimonials will appear here as collaborations grow.</p></article>
+        </div>
+      </section>
+
+      <section class="axion-section axion-entrance" id="media-kit">
+        <div class="axion-media">
+          <div class="axion-media__content">
+            <div><p class="axion-section__marker">Media Kit</p><h2 class="axion-media__title">Send the numbers, formats and sponsor details in one clean PDF.</h2><p class="axion-media__copy">The downloadable kit includes audience profile, collaboration formats, channel stats and contact details.</p></div>
+            <div class="axion-actions"><a class="axion-button axion-button--primary" href="#" data-pdf-download download="axion-media-kit.pdf">Download PDF</a><a class="axion-button" href="#contact">Email Sponsorship</a></div>
+          </div>
+          <div class="axion-media__preview">
+            <div class="axion-kit">
+              <div class="axion-kit__top"><span class="axion-logo__word">AXION</span><span class="axion-live">2026</span></div>
+              <div style="padding:32px 0"><p class="axion-meta axion-mono">Creator Media Kit</p><h3 class="axion-kit__title">AI Software Reviews</h3></div>
+              <div class="axion-kit__grid"><div class="axion-kit__cell">1,000+ subs</div><div class="axion-kit__cell">50K+ views</div><div class="axion-kit__cell">2 months</div><div class="axion-kit__cell">Typically replies within 24-48 hours</div></div>
+              <div class="axion-kit__block"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="axion-section axion-entrance" id="contact">
+        <div class="axion-contact">
+          <div><p class="axion-section__marker">Contact</p><h2 class="axion-contact__title">Put your AI product in front of a focused creator audience.</h2><p class="axion-contact__copy">Sponsor inquiries, product launches and review opportunities. Typically replies within 24-48 hours.</p></div>
+          <div class="axion-contact__stack">
+            <a class="axion-contact-card" href="mailto:axionbusiness3@gmail.com?subject=Sponsor%20Inquiry%20for%20Axion"><span><span class="axion-contact-card__label">Business Email</span><span class="axion-contact-card__value">axionbusiness3@gmail.com</span></span><span aria-hidden="true">Mail</span></a>
+            <a class="axion-contact-card" href="https://www.youtube.com/@Axion_exe" target="_blank" rel="noopener noreferrer"><span><span class="axion-contact-card__label">YouTube</span><span class="axion-contact-card__value">https://www.youtube.com/@Axion_exe</span></span><span aria-hidden="true">Play</span></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="axion-footer">
+      <div class="axion-footer__inner">
+        <div><p class="axion-footer__brand axion-mono">AXION</p><p class="axion-footer__copy">AI software reviews, tutorials and sponsored showcases.</p></div>
+        <div class="axion-footer__links">
+          <a class="axion-footer__link" href="#home">Home</a>
+          <a class="axion-footer__link" href="#about">About</a>
+          <a class="axion-footer__link" href="#videos">Videos</a>
+          <a class="axion-footer__link" href="#collaborations">Collaborations</a>
+          <a class="axion-footer__link" href="#media-kit">Media Kit</a>
+          <a class="axion-footer__link" href="#contact">Contact</a>
+        </div>
+        <div class="axion-footer__right"><a class="axion-icon-button" href="https://www.youtube.com/@Axion_exe" target="_blank" rel="noopener noreferrer" aria-label="Open Axion on YouTube">YT</a><span>(c) 2026 Axion</span></div>
+      </div>
+    </footer>
+
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Axion","url":"https://axioncreator.com","sameAs":["https://www.youtube.com/@Axion_exe"],"jobTitle":"AI software reviewer and tutorial creator","knowsAbout":["AI software reviews","local AI tools","video generation","creator tutorials","sponsored product showcases"],"email":"axionbusiness3@gmail.com"}</script>
+    <script>
+      (() => {
+        const nav = document.querySelector("[data-nav]");
+        const progress = document.querySelector("[data-progress]");
+        const cursor = document.querySelector("[data-cursor]");
+        const menu = document.querySelector("[data-menu]");
+        const mobileMenu = document.querySelector("[data-mobile-menu]");
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const brandCollaborationCount = 1;
+        const mediaKitPdf = "JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3VyY2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PAovQmFzZUZvbnQgL0hlbHZldGljYSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjEgL1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iagozIDAgb2JqCjw8Ci9CYXNlRm9udCAvSGVsdmV0aWNhLUJvbGQgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YyIC9TdWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKNCAwIG9iago8PAovQ29udGVudHMgOCAwIFIgL01lZGlhQm94IFsgMCAwIDYxMiA3OTIgXSAvUGFyZW50IDcgMCBSIC9SZXNvdXJjZXMgPDwKL0V4dEdTdGF0ZSA8PAovZ1JMczAgPDwKL0NBIC4wMzUKPj4gL2dSTHMxIDw8Ci9DQSAuMzIKPj4gL2dSTHMxMCA8PAovY2EgLjU0Cj4+IC9nUkxzMiA8PAovQ0EgLjE2Cj4+IC9nUkxzMyA8PAovY2EgLjY2Cj4+IC9nUkxzNCA8PAovY2EgMQo+PiAKICAvZ1JMczUgPDwKL0NBIC4wOAo+PiAvZ1JMczYgPDwKL2NhIC4xCj4+IC9nUkxzNyA8PAovQ0EgLjIyCj4+IC9nUkxzOCA8PAovY2EgLjQ2Cj4+IC9nUkxzOSA8PAovQ0EgMQo+Pgo+PiAvRm9udCAxIDAgUiAvUHJvY1NldCBbIC9QREYgL1RleHQgL0ltYWdlQiAvSW1hZ2VDIC9JbWFnZUkgXQo+PiAvUm90YXRlIDAgL1RyYW5zIDw8Cgo+PiAKICAvVHlwZSAvUGFnZQo+PgplbmRvYmoKNSAwIG9iago8PAovUGFnZU1vZGUgL1VzZU5vbmUgL1BhZ2VzIDcgMCBSIC9UeXBlIC9DYXRhbG9nCj4+CmVuZG9iago2IDAgb2JqCjw8Ci9BdXRob3IgKGFub255bW91cykgL0NyZWF0aW9uRGF0ZSAoRDoyMDI2MDcwMzAyMTAxNiswNicwMCcpIC9DcmVhdG9yIChhbm9ueW1vdXMpIC9LZXl3b3JkcyAoKSAvTW9kRGF0ZSAoRDoyMDI2MDcwMzAyMTAxNiswNicwMCcpIC9Qcm9kdWNlciAoUmVwb3J0TGFiIFBERiBMaWJyYXJ5IC0gXChvcGVuc291cmNlXCkpIAogIC9TdWJqZWN0ICh1bnNwZWNpZmllZCkgL1RpdGxlICh1bnRpdGxlZCkgL1RyYXBwZWQgL0ZhbHNlCj4+CmVuZG9iago3IDAgb2JqCjw8Ci9Db3VudCAxIC9LaWRzIFsgNCAwIFIgXSAvVHlwZSAvUGFnZXMKPj4KZW5kb2JqCjggMCBvYmoKPDwKL0ZpbHRlciBbIC9BU0NJSTg1RGVjb2RlIC9GbGF0ZURlY29kZSBdIC9MZW5ndGggNTE3NQo+PgpzdHJlYW0KR2IiLkBDTXQuTm8iMD5TNTk4SGFaPDs0WVlQVjs+Rlk/NEozLGssUyQ1PkhKbyVNWVxRQCsic2MraCIyY0BdQGpFYnJjXjUrSCIrZzZsNmwlLVBTUVFYIjxIcHA4clpuV2JpVExaWzluZWxaUj5rSm1BQlMpSSJdMWBVJjpENig8KFMlamw+Xyg3RkdUTG1zI1pmb1gvOkJSNmlKI0U7ZDRNKlMkXF1pPTtPcnE7ZkosJVtHXUVPNzQhWGFCI1kscWE4SU5tJ2ArLT84ZUAsV1NDPkYvYGctVS48cD9sTlIvXkNhWmFgIWgsL0NkWyJJMmooS2pEWVRecCtRa0FRZ2UoKWxuMkoyN2AhcTJAUUovLDFFbEVQcSNSKSNyIiwuOXIvZC10Kys9KDhCKDIsS15pSV5uSy83J2Q2JlFYLSY9T1tSYW5PZydHRTVPMmtbMUk1IydtbCRYKEV0ZmYjQFstcFoqZVBnLyY+N11cRGBdXkNaMSJMSnV0U19fXmldLF9APFtbUyIkTVBNLjlfMGJUYkFgNzoiSkljdEQlYSRyJyxEW2BdIm5aRWQvLVxtQSVlQWdQVCJrJmpdMlchb2QzQykwL182bDFaTlBvKmhNZW81XjNoSnNfR2A/cDYkKUlBZ1IlU3IscUwqcm5dZV42JWojTmlNVWlLJVVHKyNFZ0Q2dE1qczolJDlnRGUpaV5hSmlpPVhCaG80Sk4mLy9fN3UiKz83NDZqS1hFKS4vVC1cMEc9OkhDXVViW3VERlRdbDo6bFJObVVnMjRBcW9YJUhuY0w1UV5ib0ZrVEo1aVI1IV8zJjNoU1I1VUNwIldyaEhPPzgmblNvamk1U2BmIl47b1UiXVZaNWgxVEZwaUBTXlpjTnNsX3NvKTxxSC0vQmleUllxPjArIT5WQVMsZVJVZTJSXjtFczUkUDAqVVhdS3JUOiFndFhCVmhNST9EbU9maV9cNyUyaXAsOSJVVHU+WCYsVEg4TTFvNSsuW1gxZVdnbVFiRVklYDhBX2ZePTZLY2koPShePzNBIkpeISJkQyNBJTI2KEdcKVZcQi9QU3JDNzlDQyI1Ji5DWi5WPGYmPkhUNWVPVT9aSD9bKEw0K1VTR2Jhbkc/ZjtbQk8uaWkiX3NlQEpUPSUrOF9MInJNUkBfNDQmKS4+VmpkQFNMbmdaZmo6VlpxaV88J1VdRU1QdXNBW1QpJVgpIVgpKmcxQWZNODxQJ1w0SyFaazI6QFZxV1FFS1QiSCpjKjhXQCMxYS8ka0FLIzBFKFJTJF1jMC1nOlxlIixnIkcxTW9yLVdLQVJTOidYciRwWzc0Vl9BTXBpOy5pZW4tTEZVc2o0LCUwPj1SUyZzcjlLJnNnSShmWGtkZjhKYmhAaGFsVVZKP048ZkBAWyZBLiFwZCE0U0JobkhpRFtcZG5tN1lSODhqPyVZJUpcP3RWLyQ4V1FyPTFXQCdxKFhePEU+WTJVJD1KYS0oZFhRXk0kXzkmNjZNMUEnaTYuajtWW0NAXkdlTkQiKjFSYWYkMnIyS1NsVDxGa18tSkJhMk4iSy4scyEyVUQhMGhfP2BNIjlub2hra19hL00hV21oTFpOYjhxOVY4TSVXI0VcSSZYQVZNX2JPRVs7Mjg1RURcNVRtXW9mQyJIJyNePCdxJjdWR1VONTNGXGdzQWtDTHQoPUtMLFVTMlBUTEFVNm8hamVqRDxhLHM1RENQNHJEMG5HJyZJTm1YNEI9OV00V291QjZeZHVKI2dwRzBAbFYsa1M5TSRVPEcxL3VxPWZFJV8uKU4wKEFFTydxSFpoYCtvS0pGUmJXNltwSzxPWU1wV0RDWCIsX208OVVTLVI6IjBlNihGPkBUUVopQy1nOy5za3A2Mz5XOUZpLyxsSW1DaCxBIURwU0wrMjIpYWcvbzE1VllPRnNORCZlRTojUmE1JCRiPTxCbUxqImA2X29wR0RmImlwJlUzalt0IyVsMmFNKU9PQz1gKD43MWg0JlA8XmQ/SDJKNi0vWS09LGs2QkAsSXI3J2pbTnVIaUAvby9XKSJQMiRTb2Ncbj5salRyTiJdY11bSEspaVVycFBaJF1vazo9b1FCKylrazBoMlk3RCM4KTVIM2VAUGcvJkxcJ2JQb082JWcjN21AcydOTCJkTEMwXl1kbS9ZbTcsVmMnQHBFNmNJQDBYQSN1KCUzJWlHI0MkcWpWNURSNjJJQVYqVDtNX0dCR0lMSmZVYltATjwpOFFLXCYvMjsvW0swbzlVZnBlaktiU2EsZkMpcFYmcHJGc0NkdCUwImg2J05CTU1MbktCRldOTDFdYyoqZFc5MFN0R21BWGhaW2FdVFVnZSIuW0glYWpRLWwrN28vRXJMb0dKMy0uOCpZRiIoNUpib1xtQiQmNUo6WCFwQGxZZCRLOkQhSkVFbjhMWzc1c05cUGIpXHVGWCtVaCRYRypuUEgzKSJRYUZYNl00PyU7MCNYL1pUP0otQWFEU0ZBUWVoOltXVSM3NmJaWFxGUydKNTc7a1ZJSTJERHVdPShEQSEiMEtjPkVcXmgkbV4yMzE/V3FnWShTZzZEUywkTylAdTQoOGc8OjVicmBXbXNDM1IqLSM3cnI+aDBacissPzYqMEJmbUFLViEyajcoYGxIJUlnKS0vUE1vJVY5am5ObDMxTms0YURlJj43YENOW1JhdEBMQzgnLjdUZ2tdMClNMVBaIl0uUVxCTSM7JTRobkM+aC51MilSQWQ+NURVTU1WbVspdC9mN3VrUVVXT01uRVFqOlxkb0UpWSpeXGgjOnQtZGJGJ0NwcSNBUEM8Mk8uWy1gcGovKCRuKSlnNyNncHFOQUpINj1cc1tkME9xN2g8MCEnOWhAJUwsTkUpYlM2P0IpXSlATU4hQyREXTEnMClvMCUkRTxuI2BIJl5OUCFbKjVQc1grZ1QsWShYNm1MMFs+OWU7bWstZmopQiYkaGpWa0glOywlIjZuRHElJWIsMTBcXyZCaSM+Y2RZaC0mQ0ttJ29YZU1IJU5ZdUArW2RYX143dGVYT11xLiZyNiNtLERmcj8tKWZPNWdUJE8zJSYyS2MtOlAvMCJCSWw9NjdlcklmaSE2KEkuI1I0RmFaUF1PNkc3bjk9WVcqbElxInUtNjcsWG9PWzRaW0VFcTBOPD1nL0tyVXVQVTohVHRCKDFJXzkmJmg7aCE5Yyg+OkcudSdrLFswLFlAO11fTkc/Q0tqbV5OJDU/Y2swcUYpLk5VTWVpLERMIkwmUnFnRSw+UCs4ZmFUbF5aLUJvVHFSVHM+TzY+QjZwL3QtPjVsTFNIRDw6Y2EiXDtMRyJVWjtNTW09JCpOTi4sLT4vPmtIMS1FdEZSQz1yUScjcnJGNEtdPG8jJWJscylERGEjOnFZMyY4cCI5dWNVPyVdbGZjSzExOyQzZSlERUMpTDVEZjxZVW48XV9CUUo7ai4+cGNZci09Y1s8N0Q5KmtgT0JSTmB1Q0lgWllGbzU4aDRcJktTZk5KPCNTJ2JtJSU5c2csaSpPZFhwPl4xN2tVJ0lMMyZdJlhKI1dAa2o3JlEub2whMFhWT10zcWonK1RjIkN0MjM9Pi4tVEMubjM1SjBrLjU/JlRdQywyVjNbUUZxdUJOWGFOS05PJ0ovTmkvPUIxUD8zJm9HM0o9S287ZXFiQ3BOb0VsMSM7OkMwLVguVUNCIVNyUF1qSjJTZjY+NEZIXFBXbkF1SS5fOUY2QiVDI2MkVCU3T09JJlBmSkhdcjw4ZmsyakJiLlthanJHJGouUCJjRiJwZFo9XTM7JnBsITpIMm9YdWdmJSohdW83V0BnU2hBLUNaVkAvX2dsUzlgZCJAQHJHJlglVG1FU0smTjhOUlxlRSg6akhCb3E/P1RHaUFiI1s3T0ZONUs0dCZ0Lm8jPGJBaz02SiVTMDExdEIwMHF0VlEzYl4mZDpMYjRrWmIhOm8wMV0iSCUjJlQvTChwSVhrcEQ+LDlpSD5YQl89JG5cWiVqKlloXFQuRTI0R0JEZFtIMS02WlZcSUw8ZE5RLXMjSjtaPzt0MHUoUGFUYS9XbWYybnBgJSw5UU45XmIiMSlXcW1pNCswaE4yL281OldxLEduMCJkMEVLXyRNRyg8OzQ6ZFtcMjZgIj0vXjRIcSU4Vi9kN3Q8ZnQ9Wy9XYVhuWCp0SWZrUS1ZTjdFQTQ3NipOOjw9Q1AmdDtKYyc2WVxQSy0/PCgzMFszYlpkPV8uYiNgOjRwWCVWKztQZiFPQGcnXWNcUkAiUkRxIz9WaF9TOFwpL0xVdCJJPlMzSmUoJDlJcSJAQj1DSUVpIlk0bDclRlshPS8kcFc8YE45QCtKLTlhUF9Sb0NIazElJ046M2s2I1E4O2FUK20zYVp1QUFobVM1KFxgNyMzdV4uJT1RRkloLm0wdSM8cEtBXmtnSjBTKltvMSJEWDVaQyNnViopTXFeYVQkcXM5VWEiPzZ1RFFiN0BnVWUqVVYtLzNMZFFCW2NPZWA4K0hVWTBuN3ApS2M4USVEPlsnMWNCbHJDSCE8RWg1M1guJThxWXNPNyNMVWFCLVNtM1FqITNTKUg8IWZdVytPNGY5RDZwK3M+UypFQSgkNidnIkA8R2xxT0FdUUhiTSlrQyVHPSduISwlPThpJ2lJTU1AbmU/IycsPT4/aV9qRFJNXS5CXjtJP1ROMEgmY090YTAqaV1qLnBEKHVUKUtnOTg+LXQuJkshL0BoWGArKE5fNWhiXU1vLyY8Q3NsMTxqTSZjNjk0Lz8nTWRZPyVCZDlKVCRLMiNGK1tucEovLXI1LygiTzFaNkJZXERWSFZYRnJjUEVFWGZDKjwpbz11YCs2KSZlQEBbTlg9Xipjc3ImQU8oLzdccl5RUGcmP0RvOlk0aGNwXkpNXCciUSZQPS9LXlhEPCMmRD5OTCdpMTptalNyUHNUa0xHV1BcaS02XVYpcVdaP3AwJ1I0cj1rWk4+KD1cOCwtXFtAYTEuZUNBLTYhSUsuSkMtWyxDSCJWXXI+ODxOaS1YYj9aImZPJGtXVkxXUFRLOVVqLD5SWlg1YDc5LCxWNEkyR1gxOlkmW0UhRiZGckZaQEdNdFQsXktFK2dBYkhqLTIxJGM6c3VkUEtHSnFIKy1MYUxLazJSKEthO1U8JCRHLVVHWDNoJSJMcU8+bjdCNkE7amdzNTc7dS4pPUknLFQhJWYpcEk5QktGcDJqTlhQTkclKF5LMmNPRDNMNmZsIixKPVRQJkksPVxXS0VPMEpRRytTM11IaGlqQlsmIl1EYCpYbioqP0NSLTtxIiszLlgsa1BdSzVXX3QvOHU3SV9nKSpaVGhVUStZcVdKO3FeJWZqOmNQITZeazNeMz0jKkRhXDxjL1Y2RWVdIXBfRTxEOD0lZENONj5zcGkzIUdCIUcuPz1PQDVLZGFIQSMlbDpBLDlbcipWTWxYb2xML29qayFgQ1tyYkdaVj1vVCg6S3Nkb1FkOEZZOG9YNlo5J2Q9MHVUUlc1VzMlSTxyWC9lQ0dmPGVdLCt1W3FfWHNuWFBpZ1VHZSJiZFhCTjVeaGRNM2BQcjg6bl89bCwsSEQsOFoqREBwN2BMJ1lASFk4dCJUNWNfVCMsZW1NZFM5SF9XJGJPTysiSWdzLi8/JHAuRlUjbDJDXjctY11VX3BmN3RNakM6YSVgdFFbRGdhW2E4SjEsNVk8Tk5YSz8pImBiW2AxKyRdT0RkNUdodFI8QkFHI1xbTUR0XVhgLDwsPlMwLSlTYWIrKGE3PG9wX3A6b104X1VMWihKKWJzIXBjNytKaTMtKy9BQStVZlFWXUBobXBYS1lHQW1xKlxdcS1aKkE0KjZubkVSJjh1XS5wQG5aKFpiRkAlNC47XSpIOFc3YXJKXV1cSlo7T1QyUyRWNEVlV2g9R20nVTVwa2QqXSpcZlsoXmBcJGY2IVU1MF9nUVlOSmJAKSJfLiVHPWBDNiU1XTVYdFI0M3NialEuL21gclNtdCpOS3IkUU1bTFtNajVUMDY0V0BhczZUZz5gXSdHSlEuPzxwPSduMTl0OVsuTmNDPCFMQm45JVE2N1QzZ0FsXk1SJk11LTUzO1wkNWYyYmxCY1tTOUxXMEk0VWxLPFtDSiJQKCtWOUwsKT1bVU4rMiRGNkkiTUU5Mk9wVDUqYV1sKFJELGFyUkIzV0FSMm9dWjhEYWgsJFoycG88PzRQWHVMUElPVig3WEtGOzo5TGF0UERlOWFycThQMjtOLGxvVC40UGMmYEEpSFIlLXNgb1xlPGdBIzEuJVtScGtUJl05OUBTRzolXS9KTlRwLklNQWpTcCcpTEg5Q1ZdYk9iQ0txV1MkWV1jLWIoPTdrUmJRY3M0XTVDSmlfYWRRQHItZE0kdT5ZTCIibFsyX2s0bS10WyNucUpnSyUsJlA5VXFGXG0jT0osXm1zLWAmM2hGIU9EaE9oSjNwKXVhX3EnMjc9YkRyaExAdSRnKXI7VTdXIVNUV3BmMUhtZjU1K0tDLSp1ME1sWSY1IVQhbXBMLSdiRmEiNWovX15LPVhSdTBHMipQZ09nTUVxQHAkczNOU3FYQEJuWmdERV5HOXJwNSkjRDhtKmclVFAqSiZFJXA9PT1YcUFTKFs8bUJnbGNyY2RDY0w0TklIK2hOaGtGJm5sPnFVNmd0Wkc0azNFY09gRC9TbjM/MGpTR1A+MjUjayFNVj81PEA4KnNgZlxZLmZscycjV0FGbUBQTG82V1NBKltXMUsrbG9mMGpuQVMuSj5uS0AiZFVaXSgyR19AOlAwTkgjSnAldGguK3Q0V047cmgnXEQxKT0lWC5HQFRIMzNbbl84MUVCdGohI08mK2ZmKzYhKEBCWCsiS01yaiddM3BqTnNyIiVWPiIyT34+ZW5kc3RyZWFtCmVuZG9iagp4cmVmCjAgOQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwNjEgMDAwMDAgbiAKMDAwMDAwMDEwMiAwMDAwMCBuIAowMDAwMDAwMjA5IDAwMDAwIG4gCjAwMDAwMDAzMjEgMDAwMDAgbiAKMDAwMDAwMDc2MiAwMDAwMCBuIAowMDAwMDAwODMwIDAwMDAwIG4gCjAwMDAwMDEwOTEgMDAwMDAgbiAKMDAwMDAwMTE1MCAwMDAwMCBuIAp0cmFpbGVyCjw8Ci9JRCAKWzw1NmMyNzNjYTFkYzBiNDYwZDVlZWY0YWNiZTIzMzFjNT48NTZjMjczY2ExZGMwYjQ2MGQ1ZWVmNGFjYmUyMzMxYzU+XQolIFJlcG9ydExhYiBnZW5lcmF0ZWQgUERGIGRvY3VtZW50IC0tIGRpZ2VzdCAob3BlbnNvdXJjZSkKCi9JbmZvIDYgMCBSCi9Sb290IDUgMCBSCi9TaXplIDkKPj4Kc3RhcnR4cmVmCjY0MTYKJSVFT0YK";
+
+        document.querySelectorAll("[data-brand-collaboration-count]").forEach((node) => {
+          node.textContent = String(brandCollaborationCount);
+          if (node.dataset.value !== undefined) {
+            node.dataset.value = String(brandCollaborationCount);
+          }
+        });
+
+        const updateScroll = () => {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          const ratio = max > 0 ? window.scrollY / max : 0;
+          progress.style.transform = `scaleX(${ratio})`;
+          nav.classList.toggle("is-scrolled", window.scrollY > 28);
+        };
+
+        updateScroll();
+        window.addEventListener("scroll", updateScroll, { passive: true });
+
+        if (menu && mobileMenu) {
+          menu.addEventListener("click", () => {
+            const open = mobileMenu.classList.toggle("is-open");
+            menu.setAttribute("aria-expanded", String(open));
+            menu.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+          });
+          mobileMenu.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+              mobileMenu.classList.remove("is-open");
+              menu.setAttribute("aria-expanded", "false");
+            });
+          });
+        }
+
+        document.querySelectorAll("[data-pdf-download]").forEach((link) => {
+          link.setAttribute("href", `data:application/pdf;base64,${mediaKitPdf}`);
+        });
+
+        const animateNumber = (node) => {
+          if (node.dataset.done === "true") return;
+          node.dataset.done = "true";
+          const value = Number(node.dataset.value || "0");
+          const suffix = node.dataset.suffix || "";
+
+          if (reduceMotion) {
+            node.textContent = `${value.toLocaleString()}${suffix}`;
+            return;
+          }
+
+          let start = null;
+          const duration = value <= 2 ? 1400 : 1650;
+
+          const tick = (timestamp) => {
+            start ??= timestamp;
+            const progressValue = Math.min((timestamp - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progressValue, 4);
+            node.textContent = `${Math.round(value * eased).toLocaleString()}${suffix}`;
+
+            if (progressValue < 1) {
+              requestAnimationFrame(tick);
+            }
+          };
+
+          requestAnimationFrame(tick);
+        };
+
+        const dashboard = document.querySelector("[data-dashboard]");
+        if (dashboard) {
+          const counts = dashboard.querySelectorAll("[data-count]");
+          counts.forEach((node) => {
+            node.textContent = `0${node.dataset.suffix || ""}`;
+          });
+
+          const revealDashboard = () => {
+            dashboard.classList.add("is-animated");
+            counts.forEach(animateNumber);
+          };
+
+          if (reduceMotion || !("IntersectionObserver" in window)) {
+            revealDashboard();
+          } else {
+            const observer = new IntersectionObserver((entries) => {
+              if (!entries.some((entry) => entry.isIntersecting)) return;
+              revealDashboard();
+              observer.disconnect();
+            }, { threshold: 0.28, rootMargin: "-18% 0px -20% 0px" });
+            observer.observe(dashboard);
+          }
+        }
+
+        if (!reduceMotion && cursor) {
+          let x = -400;
+          let y = -400;
+          let tx = x;
+          let ty = y;
+          window.addEventListener("pointermove", (event) => {
+            tx = event.clientX - 144;
+            ty = event.clientY - 144;
+          }, { passive: true });
+          const drift = () => {
+            x += (tx - x) * .14;
+            y += (ty - y) * .14;
+            cursor.style.transform = `translate(${x}px, ${y}px)`;
+            requestAnimationFrame(drift);
+          };
+          drift();
+        }
+
+        if (!reduceMotion) {
+          document.querySelectorAll("[data-tilt]").forEach((card) => {
+            card.addEventListener("pointermove", (event) => {
+              const rect = card.getBoundingClientRect();
+              const px = (event.clientX - rect.left) / rect.width - .5;
+              const py = (event.clientY - rect.top) / rect.height - .5;
+              card.style.transform = `perspective(900px) rotateX(${py * -4}deg) rotateY(${px * 4}deg)`;
+            });
+            card.addEventListener("pointerleave", () => {
+              card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
+            });
+          });
+        } else {
+          document.querySelectorAll(".axion-entrance").forEach((item) => item.classList.add("is-visible"));
+        }
+      })();
+    </script>
+  </body>
+</html>
+
