@@ -33,6 +33,7 @@ import {
   type CSSProperties,
   type PointerEvent,
   type ReactNode,
+  type RefObject,
   useEffect,
   useRef,
   useState,
@@ -40,8 +41,8 @@ import {
 
 const premiumEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const channelUrl = "https://www.youtube.com/@Axion_exe";
-const businessEmail = "axionbusiness3@gmail.com";
-const brandCollaborationCount = 1;
+const businessEmail = "business@axioncreator.com";
+const brandCollaborationCount = 3;
 
 const isExternalHref = (href: string) => /^https?:\/\//.test(href);
 
@@ -57,10 +58,10 @@ const navItems = [
 ];
 
 const proofStats = [
-  { value: 1000, suffix: "+", label: "Subscribers" },
-  { value: 50000, suffix: "+", label: "Lifetime Views" },
-  { value: 2, suffix: " Months", label: "Channel Age" },
-  { value: brandCollaborationCount, suffix: "", label: "Brand Collaboration" },
+  { value: 2500, suffix: "+", label: "Subscribers" },
+  { value: 100000, suffix: "+", label: "Lifetime Views" },
+  { value: 4, suffix: " Months", label: "Channel Age" },
+  { value: brandCollaborationCount, suffix: "", label: "Brand Collaborations" },
 ];
 
 const features: Array<{
@@ -112,10 +113,10 @@ const videos = [
 ];
 
 const performance = [
-  { label: "Subscribers", value: 1000, suffix: "+", detail: "Qualified early AI audience", icon: TrendingUp },
-  { label: "Lifetime Views", value: 50000, suffix: "+", detail: "Across AI software content", icon: BarChart3 },
-  { label: "Channel Age", value: 2, suffix: " Months", detail: "Fast early momentum", icon: Gauge },
-  { label: "Brand Collaboration", value: brandCollaborationCount, suffix: "", detail: "Completed sponsor campaign", icon: LineChart },
+  { label: "Subscribers", value: 2500, suffix: "+", detail: "Qualified early AI audience", icon: TrendingUp },
+  { label: "Lifetime Views", value: 100000, suffix: "+", detail: "Across AI software content", icon: BarChart3 },
+  { label: "Channel Age", value: 4, suffix: " Months", detail: "Fast early momentum", icon: Gauge },
+  { label: "Brand Collaborations", value: brandCollaborationCount, suffix: "", detail: "Completed sponsor campaigns", icon: LineChart },
 ];
 
 const collaborationTimeline = [
@@ -123,6 +124,16 @@ const collaborationTimeline = [
     status: "Previous Collaboration",
     title: "Simpligen",
     description: "Dedicated Sponsored Video. Completed Successfully.",
+  },
+  {
+    status: "Previous Collaboration",
+    title: "HitPaw",
+    description: "Sponsored AI software showcase. Completed Successfully.",
+  },
+  {
+    status: "Previous Collaboration",
+    title: "Magiclight",
+    description: "Sponsored AI creator-tool showcase. Completed Successfully.",
   },
 ];
 
@@ -587,19 +598,73 @@ function HeroSection() {
 }
 
 function TrustedBy() {
+  const trustedBrands = ["Simpligen", "HitPaw", "Magiclight"];
+
   return (
     <RevealSection className="px-4 pb-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl rounded-lg border border-white/[0.08] bg-[#0E0E10]/60 px-5 py-5 backdrop-blur-xl">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-white/42">Trusted By</p>
-          <div className="inline-flex items-center gap-3 rounded-md border border-[#00F0FF]/24 bg-[#00F0FF]/10 px-4 py-3 text-sm font-semibold text-white shadow-[0_18px_70px_rgba(0,240,255,0.08)]">
-            <ShieldCheck className="size-5 text-[#00F0FF]" aria-hidden="true" />
-            Simpligen
+          <div className="flex flex-wrap items-center gap-3">
+            {trustedBrands.map((brand) => (
+              <div
+                key={brand}
+                className="inline-flex items-center gap-3 rounded-md border border-[#00F0FF]/24 bg-[#00F0FF]/10 px-4 py-3 text-sm font-semibold text-white shadow-[0_18px_70px_rgba(0,240,255,0.08)]"
+              >
+                <ShieldCheck className="size-5 text-[#00F0FF]" aria-hidden="true" />
+                {brand}
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </RevealSection>
   );
+}
+
+function useReliableInView<T extends HTMLElement>(ref: RefObject<T | null>) {
+  const motionInView = useInView(ref, { once: true, amount: 0.1 });
+  const [fallbackInView, setFallbackInView] = useState(false);
+
+  useEffect(() => {
+    if (motionInView || fallbackInView) return;
+
+    const node = ref.current;
+    if (!node) return;
+
+    let frame = 0;
+    const checkVisibility = () => {
+      const rect = node.getBoundingClientRect();
+      const viewportHeight = window.visualViewport?.height ?? document.documentElement.clientHeight;
+      const visible = rect.top <= viewportHeight * 0.95 && rect.bottom >= viewportHeight * 0.05;
+
+      if (visible) setFallbackInView(true);
+    };
+    const scheduleCheck = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(checkVisibility);
+    };
+
+    checkVisibility();
+    window.addEventListener("scroll", scheduleCheck, { passive: true });
+    window.addEventListener("resize", scheduleCheck);
+    window.addEventListener("orientationchange", scheduleCheck);
+    window.addEventListener("pageshow", scheduleCheck);
+    document.addEventListener("visibilitychange", scheduleCheck);
+    window.visualViewport?.addEventListener("resize", scheduleCheck);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleCheck);
+      window.removeEventListener("resize", scheduleCheck);
+      window.removeEventListener("orientationchange", scheduleCheck);
+      window.removeEventListener("pageshow", scheduleCheck);
+      document.removeEventListener("visibilitychange", scheduleCheck);
+      window.visualViewport?.removeEventListener("resize", scheduleCheck);
+    };
+  }, [fallbackInView, motionInView, ref]);
+
+  return motionInView || fallbackInView;
 }
 
 function AnimatedCounter({
@@ -612,7 +677,7 @@ function AnimatedCounter({
   prefix?: string;
 }) {
   const ref = useRef<HTMLSpanElement | null>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useReliableInView(ref);
   const reducedMotion = useReducedMotion();
   const [display, setDisplay] = useState(value <= 2 ? value : 0);
 
@@ -629,7 +694,7 @@ function AnimatedCounter({
 
     let frame = 0;
     let start: number | null = null;
-    const duration = value <= 2 ? 550 : 1350;
+    const duration = value <= 4 ? 550 : 1350;
 
     const animate = (timestamp: number) => {
       start ??= timestamp;
@@ -864,7 +929,7 @@ function LatestVideos() {
 function AnalyticsDashboard() {
   const reducedMotion = useReducedMotion();
   const dashboardRef = useRef<HTMLDivElement | null>(null);
-  const dashboardInView = useInView(dashboardRef, { once: true, margin: "-18% 0px -20% 0px" });
+  const dashboardInView = useReliableInView(dashboardRef);
   const dashboardActive = Boolean(reducedMotion || dashboardInView);
   const bars = [38, 54, 44, 72, 68, 84, 78, 92];
   const progressValues = [91, 84, 78];
@@ -944,7 +1009,7 @@ function AnalyticsDashboard() {
                 <div className="mb-7 flex items-center justify-between gap-4">
                   <div>
                     <p className="text-sm text-white/46">Lifetime views by content format</p>
-                    <p className="mt-1 text-3xl font-semibold tracking-[-0.04em] text-white">50,000+</p>
+                    <p className="mt-1 text-3xl font-semibold tracking-[-0.04em] text-white">100,000+</p>
                   </div>
                   <span className="rounded-md border border-[#00F0FF]/24 bg-[#00F0FF]/10 px-3 py-2 text-xs text-[#00F0FF]">
                     Top videos
@@ -1144,7 +1209,7 @@ function MediaKit() {
               <h3 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-white">AI Software Reviews</h3>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              {["1,000+ subs", "50K+ views", "2 months", "Typically replies within 24-48 hours"].map((item) => (
+              {["2,500+ subs", "100K+ views", "4 months", "Typically replies within 24-48 hours"].map((item) => (
                 <div key={item} className="rounded-md border border-white/[0.08] bg-white/[0.04] p-3 text-sm text-white/72">
                   {item}
                 </div>
