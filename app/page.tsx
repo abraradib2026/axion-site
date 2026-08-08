@@ -113,10 +113,10 @@ const videos = [
 ];
 
 const performance = [
-  { label: "Subscribers", value: 2500, suffix: "+", detail: "Qualified early AI audience", icon: TrendingUp },
-  { label: "Lifetime Views", value: 100000, suffix: "+", detail: "Across AI software content", icon: BarChart3 },
-  { label: "Channel Age", value: 4, suffix: " Months", detail: "Fast early momentum", icon: Gauge },
-  { label: "Brand Collaborations", value: brandCollaborationCount, suffix: "", detail: "Completed sponsor campaigns", icon: LineChart },
+  { label: "Subscribers", value: 2500, suffix: "+", detail: "2,500+ AI-focused subscribers", icon: TrendingUp },
+  { label: "Lifetime Views", value: 100000, suffix: "+", detail: "100,000+ views across AI content", icon: BarChart3 },
+  { label: "Channel Age", value: 4, suffix: " Months", detail: "Four months of rapid growth", icon: Gauge },
+  { label: "Brand Collaborations", value: brandCollaborationCount, suffix: "", detail: "Simpligen, HitPaw & Magiclight", icon: LineChart },
 ];
 
 const collaborationTimeline = [
@@ -942,7 +942,7 @@ function AnalyticsDashboard() {
       <SectionHeader
         marker="03 / Performance"
         title="Channel proof presented like a SaaS analytics view."
-        copy="Axion makes sponsor fit easy to scan with audience traction, content quality and campaign readiness in one system."
+        copy="2,500+ subscribers, 100,000+ lifetime views, four months of growth and three completed brand collaborations."
       />
 
       <div ref={dashboardRef} className="mx-auto overflow-hidden rounded-lg border border-white/[0.08] bg-[#0E0E10]/74 shadow-[0_32px_120px_rgba(0,0,0,0.38)] backdrop-blur-2xl">
